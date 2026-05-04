@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnablePackageDependencyResolution>false</EnablePackageDependencyResolution>
+		<ApplicationIcon>ico\camera.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="ico\camera.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Drawing.Common">
+			<HintPath>libs\System.Drawing.Common.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="ico\camera.ico" />
+		<Resource Include="ico\camera1.ico" />
+	</ItemGroup>
+
+	<!-- 禁用 NuGet Restore（路径含 # 时 Restore 会崩溃） -->
+	<Target Name="Restore" />
+	<Target Name="RestoreCore" />
+</Project>

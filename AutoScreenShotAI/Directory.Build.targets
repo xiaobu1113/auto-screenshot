@@ -1,0 +1,5 @@
+<Project>
+  <!-- 空操作 Restore，绕过路径含 # 导致的 NuGet Restore 崩溃 -->
+  <Target Name="Restore" />
+  <Target Name="RestoreCore" />
+</Project>
