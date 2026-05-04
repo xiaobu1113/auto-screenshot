@@ -1,0 +1,540 @@
+﻿<Window x:Class="AutoScreenShotAI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="AutoScreenShotAI"
+        Height="530" Width="520"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        Background="#F4F6F9"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#D0D5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="8,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#0078D4"/>
+                                <Setter Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#5C9FD8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#5A6A7A"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E6EEF6"/>
+                                <Setter Property="Foreground" Value="#0078D4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#CCD9E5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#005A9E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#004578"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Direction="270"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+
+        <Style x:Key="NormalStack" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="18" Height="18" CornerRadius="4"
+                                    BorderThickness="1.5"
+                                    BorderBrush="#B0B8C4"
+                                    Background="White"
+                                    Margin="0,0,8,0">
+                                <Path x:Name="CheckMark"
+                                      Width="10" Height="8"
+                                      Data="M1,4 L4,7 L9,1"
+                                      Stroke="#0078D4"
+                                      StrokeThickness="2"
+                                      StrokeEndLineCap="Round"
+                                      StrokeStartLineCap="Round"
+                                      Visibility="Collapsed"/>
+                            </Border>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="CheckMark" Property="Stroke" Value="#0078D4"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#0078D4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RunRadioButton" TargetType="RadioButton">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="18" Height="18" CornerRadius="9"
+                                    BorderThickness="1.5"
+                                    BorderBrush="#B0B8C4"
+                                    Background="White"
+                                    Margin="0,0,8,0">
+                                <Ellipse Width="10" Height="10" Fill="#007D00"
+                                         HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                            </Border>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="StopRadioButton" TargetType="RadioButton">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="18" Height="18" CornerRadius="9"
+                                    BorderThickness="1.5"
+                                    BorderBrush="#B0B8C4"
+                                    Background="White"
+                                    Margin="0,0,8,0">
+                                <Ellipse Width="10" Height="10" Fill="#F53F3F"
+                                         HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                            </Border>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Style.Resources>
+                <DropShadowEffect x:Key="DropShadowEffect" BlurRadius="12" ShadowDepth="2" Opacity="0.15" Direction="270" Color="#000000"/>
+                <ControlTemplate x:Key="ComboBoxToggleButtonTemplate" TargetType="ToggleButton">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" SnapsToDevicePixels="True">
+                        <ContentPresenter x:Name="ContentPresenter" Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#0078D4"/>
+                            <Setter TargetName="Border" Property="Background" Value="#F5F5F5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#E8E8E8"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#0078D4"/>
+                            <Setter TargetName="Border" Property="Background" Value="#FAFAFA"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Style.Resources>
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Padding" Value="12,4,8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#D0D5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}" Focusable="False"
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press" Template="{StaticResource ComboBoxToggleButtonTemplate}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter x:Name="ContentPresenter" Grid.Column="0" Margin="{TemplateBinding Padding}"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" IsHitTestVisible="False"/>
+                                    <Path x:Name="ArrowIcon" Grid.Column="1" Width="10" Height="6" Margin="0,0,12,0" Fill="#666666"
+                                          HorizontalAlignment="Right" VerticalAlignment="Center" Data="M0,0 L5,6 L10,0 Z"/>
+                                </Grid>
+                            </ToggleButton>
+                            <Popup x:Name="Popup" AllowsTransparency="True"
+                                   IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                   Placement="Bottom" Focusable="False" PopupAnimation="Fade">
+                                <Grid x:Name="DropDownGrid" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
+                                    <Border x:Name="DropDownBorder" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8"
+                                            Effect="{StaticResource DropShadowEffect}">
+                                        <ScrollViewer x:Name="ScrollViewer" Margin="0" Background="Transparent" CanContentScroll="True"
+                                                      Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                            <ItemsPresenter x:Name="ItemsPresenter" Margin="4"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="ToggleButton" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ArrowIcon" Property="Fill" Value="#0078D4"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="ArrowIcon" Property="Fill" Value="#0078D4"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#999999"/>
+                                <Setter TargetName="ArrowIcon" Property="Fill" Value="#CCCCCC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Padding" Value="12,0"/>
+                        <Setter Property="Margin" Value="2,2,2,0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E5F3FF"/>
+                                <Setter Property="Foreground" Value="#0078D4"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#CCE5FF"/>
+                                <Setter Property="Foreground" Value="#0078D4"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="0">
+        <Border  FocusVisualStyle="{x:Null}">
+            <StackPanel>
+                <!-- 配置区域（卡片分组） -->
+                <Border Style="{StaticResource CardPanel}">
+                    <StackPanel>
+                        <!-- 输出目录 -->
+                        <StackPanel Style="{StaticResource NormalStack}">
+                            <TextBlock x:Name="txtOutputDir" Margin="8,0" Width="110" VerticalAlignment="Center" FontWeight="SemiBold">Output Directory</TextBlock>
+                            <TextBox x:Name="TxtOutputDir" Width="240" ToolTip="Where to Save Screenshots"/>
+                            <Button x:Name="BtnBrowseOutput" Content="📂" Style="{StaticResource IconButton}" Margin="5,0,0,0" Click="BtnBrowseOutput_Click" ToolTip="Choose a Folder"/>
+                            <Button x:Name="BtnOpenOutput" Content="↗" Style="{StaticResource IconButton}" Margin="2,0,0,0" Click="BtnOpenOutput_Click" ToolTip="Open the Folder"/>
+                        </StackPanel>
+
+                        <!-- Python 脚本路径 -->
+                        <StackPanel Style="{StaticResource NormalStack}">
+                            <TextBlock x:Name="txtPythonScript" Margin="8,0" Width="110" VerticalAlignment="Center" FontWeight="SemiBold">Python Script</TextBlock>
+                            <TextBox x:Name="TxtPythonPath" Width="240" ToolTip="Where the Script is"/>
+                            <Button x:Name="BtnBrowsePython" Content="📂" Style="{StaticResource IconButton}" Margin="5,0,0,0" Click="BtnBrowsePython_Click" ToolTip="Choose a File"/>
+                            <Button x:Name="BtnOpenScript" Content="↗" Style="{StaticResource IconButton}" Margin="2,0,0,0" Click="BtnOpenScript_Click" ToolTip="Open the Folder"/>
+                        </StackPanel>
+
+                        <!-- 文件名模板 -->
+                        <StackPanel Style="{StaticResource NormalStack}">
+                            <TextBlock x:Name="txtFileNameTemplate" Margin="8,0" Width="110" VerticalAlignment="Center" FontWeight="SemiBold">Filename Template</TextBlock>
+                            <TextBox x:Name="TxtFilenameTemplate" Width="240" ToolTip="C# Method ToString() Param">yyyy-MM-dd HH-mm-ss</TextBox>
+                            <Button x:Name="BtnResetFileName" Content="⟳" Style="{StaticResource IconButton}" Margin="5,0,0,0" Click="BtnResetFileName_Click" ToolTip="Reset the Template"/>
+                        </StackPanel>
+
+                        <!-- 截图间隔 + 格式 -->
+                        <StackPanel Style="{StaticResource NormalStack}">
+                            <TextBlock  x:Name="txtShotInterval" Margin="8,0" Width="110" VerticalAlignment="Center" FontWeight="SemiBold">Shot Interval (s)</TextBlock>
+                            <TextBox x:Name="TxtInterval" Width="60" LostFocus="TxtCheckInt_LostFocus" ToolTip="Shot per Interval in Seconds">300</TextBox>
+
+                            <TextBlock x:Name="txtFormat" Margin="6,0,4,0" VerticalAlignment="Center" FontWeight="SemiBold">Format</TextBlock>
+                            <ComboBox x:Name="CombScreenshotFormat" Style="{StaticResource ModernComboBoxStyle}" Width="75" SelectedIndex="0"
+                                      SelectionChanged="CombScreenshotFormat_SelectionChanged">
+                                <ComboBoxItem>.jpg</ComboBoxItem>
+                                <ComboBoxItem>.png</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock x:Name="txtLanguage" Margin="6,0,4,0" VerticalAlignment="Center" FontWeight="SemiBold">Language</TextBlock>
+                            <ComboBox x:Name="CombLanguage" Style="{StaticResource ModernComboBoxStyle}" Width="75" SelectedIndex="1"
+                                      SelectionChanged="CombLanguage_SelectionChanged">
+                                <ComboBoxItem>文</ComboBoxItem>
+                                <ComboBoxItem>A</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- 提示词 -->
+                        <StackPanel Style="{StaticResource NormalStack}">
+                            <TextBlock x:Name="txtPrompt" Margin="8,0" Width="110" VerticalAlignment="Top" FontWeight="SemiBold">Prompt</TextBlock>
+                            <TextBox x:Name="TxtPrompt" Width="240" Height="60" TextWrapping="Wrap" AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto" LostFocus="TxtPrompt_LostFocus"
+                                     ToolTip="AI Prompt"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 选项区域（卡片） -->
+                <Border Style="{StaticResource CardPanel}">
+                    <StackPanel>
+                        <WrapPanel Margin="0,0,0,4">
+                            <Border Width="210" Margin="0,0,12,0">
+                                <CheckBox x:Name="ChkAutoStartup" Margin="8,5,0,5"
+                                          Checked="ChkAutoStartup_Checked" Unchecked="ChkAutoStartup_Unchecked">Auto Startup</CheckBox>
+                            </Border>
+                            <Border Width="210">
+                                <CheckBox x:Name="ChkMinimizeRunning" Margin="8,5,0,5"
+                                          Checked="ChkMinimizeRunning_Checked" Unchecked="ChkMinimizeRunning_Unchecked">Running at Startup</CheckBox>
+                            </Border>
+                        </WrapPanel>
+                        <WrapPanel Margin="0,0,0,4">
+                            <Border Width="210" Margin="0,0,12,0">
+                                <CheckBox x:Name="ChkEnableCamera" Margin="8,5,0,5"
+                                          Checked="ChkEnableCamera_Checked" Unchecked="ChkEnableCamera_Unchecked">Enable Camera</CheckBox>
+                            </Border>
+
+                            <Border Width="210">
+                                <CheckBox x:Name="ChkEnableScript" Margin="8,5,0,5"
+                                          Checked="ChkEnableScript_Checked" Unchecked="ChkEnableScript_Unchecked">Enable Script</CheckBox>
+                            </Border>
+                        </WrapPanel>
+
+
+                        <WrapPanel>
+                            <Border Width="210" Margin="0,0,12,0">
+                                <CheckBox x:Name="ChkMinimizeToTray" Margin="8,5,0,5"
+                                          Checked="ChkMinimizeToTray_Checked" Unchecked="ChkMinimizeToTray_Unchecked">Minimize to Tray by Closing</CheckBox>
+                            </Border>
+
+                            <Grid Margin="8,5,0,5" Width="210">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="ChkAutoDelete" Grid.Column="0" VerticalAlignment="Center"
+                                          Checked="ChkAutoDelete_Checked" Unchecked="ChkAutoDelete_Unchecked">Auto Delete</CheckBox>
+                                <TextBox x:Name="TxtAutoDeletionDays" Grid.Column="1" Width="50" Margin="10,0,6,0"
+                                         Text="60" TextAlignment="Center" LostFocus="TxtAutoDeletionDays_LostFocus"/>
+                                <TextBlock x:Name="txtDays" Grid.Column="2" VerticalAlignment="Center" Text="Days"/>
+                            </Grid>
+
+
+                        </WrapPanel>
+                        <!-- 自动删除行 -->
+                    </StackPanel>
+                </Border>
+
+                <!-- 操作按钮区域 -->
+                <Border Style="{StaticResource CardPanel}" Padding="10,8">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <!-- 截图按钮 -->
+                        <Button x:Name="BtnTakeShot"
+                                Style="{StaticResource PrimaryButton}"
+                                Width="200"
+                                Margin="0,0,20,0"
+                                Click="BtnTakeShot_Click"
+                                Background="Transparent"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <Image Source="/ico/camera1.ico"
+                                       Width="28"
+                                       Height="28"
+                                       Margin="0,0,8,0"
+                                       VerticalAlignment="Center"/>
+                                <TextBlock x:Name="BtnTakeShotText"
+                                           Text="Take a Shot Now"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- 运行/停止单选框组 -->
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <RadioButton x:Name="RdoRun"
+                                         Style="{StaticResource RunRadioButton}"
+                                         GroupName="RunStop"
+                                         Margin="0,0,20,0"
+                                         VerticalContentAlignment="Center"
+                                         Checked="RdoRun_Checked"
+                                         Unchecked="RdoRun_Unchecked">
+                                <TextBlock x:Name="RdoRunText">Run</TextBlock>
+                            </RadioButton>
+                            <RadioButton x:Name="RdoStop"
+                                         Style="{StaticResource StopRadioButton}"
+                                         GroupName="RunStop"
+                                         IsChecked="True"
+                                         VerticalContentAlignment="Center">
+                                <TextBlock x:Name="RdoStopText">Stop</TextBlock>
+                            </RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <!-- 状态栏 -->
+                <Border  Style="{StaticResource CardPanel}" Padding="10,8">
+                    <TextBlock x:Name="TxtStatus" Text="Status: Ready" Foreground="#5A6A7A" FontWeight="SemiBold" FontSize="12"/>
+                </Border>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

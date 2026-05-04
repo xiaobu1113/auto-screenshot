@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnablePackageDependencyResolution>false</EnablePackageDependencyResolution>
+		<ApplicationIcon>ico\camera.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="ico\camera.ico" />
+		<None Remove="ico\camera1.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" NoWarn="NU1701" />
+		<PackageReference Include="AForge.Video" Version="2.2.5" NoWarn="NU1701" />
+		<PackageReference Include="AForge.Imaging" Version="2.2.5" NoWarn="NU1701" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ico\camera.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="ico\camera1.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>
